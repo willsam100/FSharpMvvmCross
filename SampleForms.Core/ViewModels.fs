@@ -1,7 +1,10 @@
 ﻿namespace SampleForms.Core.ViewModels
 
+open System
 open MvvmCross.Core.ViewModels
 open System.Windows.Input
+open System.Diagnostics
+open SampleForms.Core.NameOf
 
 type AboutViewModel() = 
     inherit MvxViewModel()
@@ -15,15 +18,20 @@ type FirstViewModel() =
     
         with get() =  _yourNickname; 
         and set(value) = 
-            if (SetProperty(ref _yourNickname, value)) then
-                this.RaisePropertyChanged(fun () -> Hello);
+            if (_yourNickname <> value) then
+                _yourNickname <- value
+                this.RaisePropertyChanged()
+                this.RaisePropertyChanged(nameOf <@ this.Hello @>);
 
     member this.Hello
         with get() =  "Hello " + this.YourNickname; 
+       
     
     member this.ShowAboutPageCommand
-        with get() : ICommand = MvxCommand(fun () -> ShowViewModel<AboutViewModel>()); 
+        with get() = 
+            new MvxCommand(Action(this.Show))
         
+    member this.Show() = this.ShowViewModel<AboutViewModel>() |> ignore
     
 
 
