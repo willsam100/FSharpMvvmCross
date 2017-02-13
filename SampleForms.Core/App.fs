@@ -1,7 +1,5 @@
 ﻿namespace SampleForms.Core
 
-open System
-open Xamarin.Forms
 open MvvmCross.Platform.IoC
 
 type App() =

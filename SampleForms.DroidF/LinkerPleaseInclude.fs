@@ -7,9 +7,6 @@ open Android.App
 open Android.Views
 open Android.Widget
 
-//#pragma warning disable 219
-
-
 // This class is never actually executed, but when Xamarin linking is enabled it does how to ensure types and properties
 // are preserved in the deployed app
 type LinkerPleaseInclude() = 
@@ -29,53 +26,43 @@ type LinkerPleaseInclude() =
         EventHandler(fun s e  -> view.ContentDescription <- view.ContentDescription + "")
         |> view.Click.AddHandler
     
-    member this.Include(text: TextView) = 
-    
-        text.TextChanged += (sender, args) => text.Text = "" + text.Text
-    //    text.Hint = "" + text.Hint
-    
+    member this.Include(text: TextView): unit = 
+        EventHandler<Android.Text.TextChangedEventArgs>(fun s a -> text.Text <- "" + text.Text)
+        |> text.TextChanged.AddHandler
+        text.Hint <- "" + text.Hint
 
-    //member this.Include(CheckedTextView text)
+    member this.Include(text: CheckedTextView): unit =
+        EventHandler<Android.Text.TextChangedEventArgs>(fun s a -> text.Text <- "" + text.Text)
+        |> text.TextChanged.AddHandler
+        text.Hint <- "" + text.Hint
     
-    //    text.TextChanged += (sender, args) => text.Text = "" + text.Text
-    //    text.Hint = "" + text.Hint
+    member this.Include(cb: CompoundButton) = 
+        EventHandler<CompoundButton.CheckedChangeEventArgs>(fun s a -> cb.Checked <- not cb.Checked)
+        |> cb.CheckedChange.AddHandler
     
+    member this.Include(sb: SeekBar) =
+        EventHandler<SeekBar.ProgressChangedEventArgs>(fun s a -> sb.Progress <- sb.Progress + 1)
+        |> sb.ProgressChanged.AddHandler
+    
+    member this.Include(act: Activity) = 
+        act.Title <- act.Title + ""
 
-    //member this.Include(CompoundButton cb)
-    
-    //    cb.CheckedChange += (sender, args) => cb.Checked = !cb.Checked
-    
+    member this.Include(changed: INotifyCollectionChanged) = 
+        NotifyCollectionChangedEventHandler(fun s a -> () //let test = string.Format("01234", e.Action, e.NewItems, e.NewStartingIndex, e.OldItems, e.OldStartingIndex
+                                                                        ) 
+        |> changed.CollectionChanged.AddHandler
 
-    //member this.Include(SeekBar sb)
+    member this.Include(command: ICommand) = 
+        EventHandler(fun s a -> if (command.CanExecute(null)) then command.Execute(null) )
+        |> command.CanExecuteChanged.AddHandler
     
-    //    sb.ProgressChanged += (sender, args) => sb.Progress = sb.Progress + 1
-    
-
-    //member this.Include(Activity act)
-    
-    //    act.Title = act.Title + ""
-    
-
-    //member this.Include(INotifyCollectionChanged changed)
-    
-    //    changed.CollectionChanged += (s, e) =>  var test = string.Format("01234", e.Action, e.NewItems, e.NewStartingIndex, e.OldItems, e.OldStartingIndex) 
-    
-
-    //member this.Include(ICommand command)
-    
-    //    command.CanExecuteChanged += (s, e) =>  if (command.CanExecute(null)) command.Execute(null) 
-    
-
-    //member this.Include(MvvmCross.Platform.IoC.MvxPropertyInjector injector)
-    
-    //    injector = new MvvmCross.Platform.IoC.MvxPropertyInjector()
-    
-
-    //member this.Include(System.ComponentModel.INotifyPropertyChanged changed)
-    
-    //    changed.PropertyChanged += (sender, e) =>
-        
-    //        var test = e.PropertyName
+    member this.Include(injector: MvvmCross.Platform.IoC.MvxPropertyInjector byref) = 
+        injector <- new MvvmCross.Platform.IoC.MvxPropertyInjector()
+   
+    member this.Include(changed: System.ComponentModel.INotifyPropertyChanged) =
+        ComponentModel.PropertyChangedEventHandler(fun s e -> let test = e.PropertyName
+                                                              ())
+        |> changed.PropertyChanged.AddHandler
         
         
     

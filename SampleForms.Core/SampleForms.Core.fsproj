@@ -1,4 +1,5 @@
-﻿<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -20,18 +21,41 @@
     <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <PlatformTarget></PlatformTarget>
+    <PlatformTarget>
+    </PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <GenerateTailCalls>true</GenerateTailCalls>
-    <PlatformTarget></PlatformTarget>
+    <PlatformTarget>
+    </PlatformTarget>
   </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\FSharp\Microsoft.Portable.FSharp.Targets" />
+  <Import Project="..\packages\Xamarin.Forms.2.3.2.127\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.3.2.127\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
   <ItemGroup>
-    <Folder Include="Pages\" />
+    <Compile Include="NameOf.fs" />
+    <Compile Include="ViewModels.fs" />
+    <Compile Include="App.fs" />
+    <Compile Include="AssemblyInfo.fs" />
+    <EmbeddedResource Include="Pages\AboutPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <Compile Include="Pages\AboutPage.xaml.fs">
+      <DependentUpon>AboutPage.xaml</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Pages\FirstPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <Compile Include="Pages\FirstPage.xaml.fs">
+      <DependentUpon>FirstPage.xaml</DependentUpon>
+    </Compile>
+    <None Include="packages.config" />
+    <None Include="Scripts\load-references-debug.fsx" />
+    <None Include="Scripts\load-project-debug.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Core">
@@ -62,25 +86,4 @@
       <HintPath>..\packages\MvvmCross.Binding.4.4.0\lib\portable-net45+win+wpa81+wp80\MvvmCross.Localization.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="NameOf.fs" />
-    <Compile Include="ViewModels.fs" />
-    <Compile Include="App.fs" />
-    <Compile Include="AssemblyInfo.fs" />
-    <EmbeddedResource Include="Pages\AboutPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <Compile Include="Pages\AboutPage.xaml.fs">
-      <DependentUpon>AboutPage.xaml</DependentUpon>
-    </Compile>
-    <EmbeddedResource Include="Pages\FirstPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <Compile Include="Pages\FirstPage.xaml.fs">
-      <DependentUpon>FirstPage.xaml</DependentUpon>
-    </Compile>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\FSharp\Microsoft.Portable.FSharp.Targets" />
-  <Import Project="..\packages\Xamarin.Forms.2.3.2.127\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.3.2.127\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
 </Project>
